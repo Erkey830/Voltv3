@@ -148,9 +148,11 @@
 	.include "src/faraway_island.o"
 	.include "src/trainer_hill.o"
 	.include "src/rayquaza_scene.o"
-<<<<<<< HEAD
 	.include "src/debug.o"
-	.include "src/battle_controller_player.o"
+<<<<<<< HEAD
 =======
+	.include "src/quests.o"
+	.include "src/day_night.o"
+>>>>>>> 1db014db5... Merge branch 'unbound-quest-menu' of https://github.com/PokemonSanFran/pokeemerald
 	.include "src/pokedex_plus_hgss.o"
->>>>>>> bc2c3e1d49a1ab8de251a806a039b019269af21e
+	.include "src/battle_controller_player.o"

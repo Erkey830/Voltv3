@@ -342,12 +342,13 @@ SECTIONS {
         src/gym_leader_rematch.o(.text);
         src/battle_transition_frontier.o(.text);
         src/international_string_util.o(.text);
-<<<<<<< HEAD
         src/pokemon_debug.o(.text);
-        src/expansion_intro.o(.text);
+<<<<<<< HEAD
 =======
-		src/soar.o(.text);
->>>>>>> 891e2897e48620f89baced8508cf2be3d5a830ab
+        src/day_night.o(.text);
+        src/quests.o(.text);
+>>>>>>> 1db014db5... Merge branch 'unbound-quest-menu' of https://github.com/PokemonSanFran/pokeemerald
+        src/expansion_intro.o(.text);
     } =0
 
     script_data :
@@ -710,15 +711,15 @@ SECTIONS {
         src/fonts.o(.rodata);
         src/international_string_util.o(.rodata);
         src/mystery_event_msg.o(.rodata);
-<<<<<<< HEAD
         data/mystery_gift.o(.rodata);
-=======
-        data/mystery_event.o(.rodata);
-		src/soar.o(.rodata);
->>>>>>> 891e2897e48620f89baced8508cf2be3d5a830ab
         src/m4a_tables.o(.rodata);
         data/sound_data.o(.rodata);
         src/pokemon_debug.o(.rodata);
+<<<<<<< HEAD
+=======
+        src/quests.o(.rodata);
+        src/day_night.o(.rodata);
+>>>>>>> 1db014db5... Merge branch 'unbound-quest-menu' of https://github.com/PokemonSanFran/pokeemerald
         src/expansion_intro.o(.rodata);
     } =0
 

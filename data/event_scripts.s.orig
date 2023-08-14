@@ -55,7 +55,11 @@
 #include "constants/union_room.h"
 #include "constants/vars.h"
 #include "constants/weather.h"
+<<<<<<< HEAD
+=======
+#include "constants/day_night.h"
 #include "constants/quests.h"
+>>>>>>> 1db014db5... Merge branch 'unbound-quest-menu' of https://github.com/PokemonSanFran/pokeemerald
 	.include "asm/macros.inc"
 	.include "asm/macros/event.inc"
 	.include "constants/constants.inc"
