@@ -58,7 +58,7 @@ enum
     MENU_ACTION_PLAYER,
     MENU_ACTION_SAVE,
     MENU_ACTION_OPTION,
-    MENU_ACTION_EXIT,
+    // MENU_ACTION_EXIT,
     MENU_ACTION_RETIRE_SAFARI,
     MENU_ACTION_PLAYER_LINK,
     MENU_ACTION_REST_FRONTIER,
@@ -91,6 +91,7 @@ EWRAM_DATA static u8 (*sSaveDialogCallback)(void) = NULL;
 EWRAM_DATA static u8 sSaveDialogTimer = 0;
 EWRAM_DATA static bool8 sSavingComplete = FALSE;
 EWRAM_DATA static u8 sSaveInfoWindowId = 0;
+static EWRAM_DATA u8 sStartMenuSpritesId[9]= {};
 
 // Menu action callbacks
 static bool8 StartMenuPokedexCallback(void);
@@ -362,7 +363,6 @@ static void BuildDebugStartMenu(void)
     AddStartMenuAction(MENU_ACTION_SAVE);
     AddStartMenuAction(MENU_ACTION_OPTION);
 }
-
 static void BuildSafariZoneStartMenu(void)
 {
     AddStartMenuAction(MENU_ACTION_RETIRE_SAFARI);
@@ -371,7 +371,7 @@ static void BuildSafariZoneStartMenu(void)
     AddStartMenuAction(MENU_ACTION_BAG);
     AddStartMenuAction(MENU_ACTION_PLAYER);
     AddStartMenuAction(MENU_ACTION_OPTION);
-    AddStartMenuAction(MENU_ACTION_EXIT);
+    // AddStartMenuAction(MENU_ACTION_EXIT);
 }
 
 static void BuildLinkModeStartMenu(void)
@@ -401,7 +401,7 @@ static void BuildUnionRoomStartMenu(void)
 
     AddStartMenuAction(MENU_ACTION_PLAYER);
     AddStartMenuAction(MENU_ACTION_OPTION);
-    AddStartMenuAction(MENU_ACTION_EXIT);
+    // AddStartMenuAction(MENU_ACTION_EXIT);
 }
 
 static void BuildBattlePikeStartMenu(void)
@@ -410,7 +410,7 @@ static void BuildBattlePikeStartMenu(void)
     AddStartMenuAction(MENU_ACTION_POKEMON);
     AddStartMenuAction(MENU_ACTION_PLAYER);
     AddStartMenuAction(MENU_ACTION_OPTION);
-    AddStartMenuAction(MENU_ACTION_EXIT);
+    // AddStartMenuAction(MENU_ACTION_EXIT);
 }
 
 static void BuildBattlePyramidStartMenu(void)
@@ -429,7 +429,7 @@ static void BuildMultiPartnerRoomStartMenu(void)
     AddStartMenuAction(MENU_ACTION_POKEMON);
     AddStartMenuAction(MENU_ACTION_PLAYER);
     AddStartMenuAction(MENU_ACTION_OPTION);
-    AddStartMenuAction(MENU_ACTION_EXIT);
+    // AddStartMenuAction(MENU_ACTION_EXIT);
 }
 
 static void ShowSafariBallsWindow(void)
@@ -535,12 +535,49 @@ static const struct SpriteSheet spriteSheetIconsMenu =
             .tag = TAG_ICONS_MENU, //LUGAR DONDE SE CARGA EL GRÃFICO ----------
 };
 static const struct SpritePalette spritePaletteIconsMenu =
+
+//**********************************************
+//ICONS MENU
+//**********************************************
+
+#define TAG_ICONS_MENU 0x3333
+
+#define INITIAL_POS_RIGHT_X 232 
+
+static const u16 sIconsMenuPal[] = INCBIN_U16("graphics/start_menu/menuIconPal.gbapal");
+static const u8 sIconMenuSprites[] = INCBIN_U8("graphics/start_menu/iconMenu.4bpp");
+
+static const struct OamData gSpriteOamData32 =
 {
-            .data = sIconsMenuPal,
-            .tag = TAG_ICONS_MENU, //LUGAR DONDE SE CARGA LA PALETA ----------
+    .y = 0,
+    .affineMode = 0,
+    .objMode = 0, 
+    .mosaic = 0, 
+    .bpp = 0,
+    .shape = 0, 
+    .x = 0, 
+    .matrixNum = 0,
+    .size = SPRITE_SIZE(32x32),
+    .tileNum = 0,
+    .priority = 0, 
+    .paletteNum = 0, 
+    .affineParam = 0, 
 };
 
-static const union AnimCmd sAnimDex[] = //cambiar de
+
+static const struct SpriteSheet spriteSheetIconsMenu =
+{
+            .data = sIconMenuSprites, //GRÃFICO ----------
+            .size = 3584, //TAMAÃ‘O DEL GRÃFICO
+            .tag = TAG_ICONS_MENU, //LUGAR DONDE SE CARGA EL GRÃFICO ----------
+};
+static const struct SpritePalette spritePaletteIconsMenu =
+{
+    ANIMCMD_FRAME(0, 0),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd sAnimDex[] =
 {
     ANIMCMD_FRAME(0, 0),
     ANIMCMD_END,
@@ -683,7 +720,7 @@ static bool32 InitStartMenuStep(void)
         break;
     case 2:
         LoadMessageBoxAndBorderGfx();
-        DrawStdWindowFrame(AddStartMenuWindow(sNumStartMenuActions), FALSE);
+        // DrawStdWindowFrame(AddStartMenuWindow(sNumStartMenuActions), FALSE);
         sInitStartMenuData[1] = 0;
         sInitStartMenuData[0]++;
         break;
@@ -695,12 +732,14 @@ static bool32 InitStartMenuStep(void)
         sInitStartMenuData[0]++;
         break;
     case 4:
-        if (PrintStartMenuActions(&sInitStartMenuData[1], 2))
+        // if (PrintStartMenuActions(&sInitStartMenuData[1], 2))
+            LoadSpriteIconMenu();
             sInitStartMenuData[0]++;
         break;
     case 5:
-        sStartMenuCursorPos = InitMenuNormal(GetStartMenuWindowId(), FONT_NORMAL, 0, 9, 16, sNumStartMenuActions, sStartMenuCursorPos);
-        CopyWindowToVram(GetStartMenuWindowId(), COPYWIN_MAP);
+        // sStartMenuCursorPos = InitMenuNormal(GetStartMenuWindowId(), FONT_NORMAL, 0, 9, 16, sNumStartMenuActions, sStartMenuCursorPos);
+        // CopyWindowToVram(GetStartMenuWindowId(), COPYWIN_MAP);
+        MoveSelectSpriteIcon();
         return TRUE;
     }
 
@@ -786,18 +825,25 @@ static bool8 HandleStartMenuInput(void)
     if (JOY_NEW(DPAD_LEFT))
     {
         PlaySE(SE_SELECT);
-        sStartMenuCursorPos = Menu_MoveCursor(-1);
+        // sStartMenuCursorPos = Menu_MoveCursor(-1);
+        MoveSelectSpriteIcon();
+        sStartMenuCursorPos = (sStartMenuCursorPos > 0) ? sStartMenuCursorPos - 1 : sNumStartMenuActions - 1;
+        MoveSelectSpriteIcon();
     }
 
     if (JOY_NEW(DPAD_RIGHT))
     {
         PlaySE(SE_SELECT);
-        sStartMenuCursorPos = Menu_MoveCursor(1);
+        // sStartMenuCursorPos = Menu_MoveCursor(1);
+        MoveSelectSpriteIcon();
+        sStartMenuCursorPos = (sStartMenuCursorPos < sNumStartMenuActions - 1 ) ? sStartMenuCursorPos+1 : 0;
+        MoveSelectSpriteIcon();
     }
 
     if (JOY_NEW(A_BUTTON))
     {
         PlaySE(SE_SELECT);
+        DestroySpriteIconsMenu();
         if (sStartMenuItems[sCurrentStartMenuActions[sStartMenuCursorPos]].func.u8_void == StartMenuPokedexCallback)
         {
             if (GetNationalPokedexCount(FLAG_GET_SEEN) == 0)
@@ -1189,8 +1235,9 @@ static bool8 SaveErrorTimer(void)
 
 static u8 SaveConfirmSaveCallback(void)
 {
-    ClearStdWindowAndFrame(GetStartMenuWindowId(), FALSE);
-    RemoveStartMenuWindow();
+    // ClearStdWindowAndFrame(GetStartMenuWindowId(), FALSE);
+    // RemoveStartMenuWindow();
+    DestroySpriteIconsMenu();
     ShowSaveInfoWindow();
 
     if (InBattlePyramid())
@@ -1632,8 +1679,9 @@ void SaveForBattleTowerLink(void)
 
 static void HideStartMenuWindow(void)
 {
-    ClearStdWindowAndFrame(GetStartMenuWindowId(), TRUE);
-    RemoveStartMenuWindow();
+    // ClearStdWindowAndFrame(GetStartMenuWindowId(), TRUE);
+    // RemoveStartMenuWindow();
+    DestroySpriteIconsMenu();
     ScriptUnfreezeObjectEvents();
     UnlockPlayerFieldControls();
 }
