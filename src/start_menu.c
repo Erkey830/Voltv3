@@ -505,7 +505,7 @@ static bool32 PrintStartMenuActions(s8 *pIndex, u32 count)
 }
 
 #define INITIAL_POS_RIGHT_X 40 
-#define INITIAL_POS_DOWN_Y 140
+#define INITIAL_POS_DOWN_Y 130
 
 static const u16 sIconsMenuPal[] = INCBIN_U16("graphics/start_menu/menuIconPal.gbapal");
 static const u8 sIconMenuSprites[] = INCBIN_U8("graphics/start_menu/iconMenu.4bpp");
