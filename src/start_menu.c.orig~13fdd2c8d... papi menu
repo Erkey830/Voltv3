@@ -169,6 +169,7 @@ static const u8 sText_QuestMenu[] = _("QUESTS");
 
 static const struct MenuAction sStartMenuItems[] =
 {
+<<<<<<< HEAD
     [MENU_ACTION_POKEDEX]           = {gText_MenuPokedex, {.u8_void = StartMenuPokedexCallback}},
     [MENU_ACTION_POKEMON]           = {gText_MenuPokemon, {.u8_void = StartMenuPokemonCallback}},
     [MENU_ACTION_BAG]               = {gText_MenuBag, {.u8_void = StartMenuBagCallback}},
@@ -176,11 +177,25 @@ static const struct MenuAction sStartMenuItems[] =
     [MENU_ACTION_PLAYER]            = {gText_MenuPlayer, {.u8_void = StartMenuPlayerNameCallback}},
     [MENU_ACTION_SAVE]              = {gText_MenuSave, {.u8_void = StartMenuSaveCallback}},
     [MENU_ACTION_OPTION]            = {gText_MenuOption, {.u8_void = StartMenuOptionCallback}},
-    //[MENU_ACTION_EXIT]            = {gText_MenuExit,    {.u8_void = StartMenuExitCallback}},
+    [MENU_ACTION_EXIT]              = {gText_MenuExit, {.u8_void = StartMenuExitCallback}},
     [MENU_ACTION_RETIRE_SAFARI]     = {gText_MenuRetire, {.u8_void = StartMenuSafariZoneRetireCallback}},
     [MENU_ACTION_PLAYER_LINK]       = {gText_MenuPlayer, {.u8_void = StartMenuLinkModePlayerNameCallback}},
     [MENU_ACTION_REST_FRONTIER]     = {gText_MenuRest, {.u8_void = StartMenuSaveCallback}},
     [MENU_ACTION_RETIRE_FRONTIER]   = {gText_MenuRetire, {.u8_void = StartMenuBattlePyramidRetireCallback}},
+=======
+    [MENU_ACTION_POKEDEX]         = {gText_MenuPokedex, {.u8_void = StartMenuPokedexCallback}},
+    [MENU_ACTION_POKEMON]         = {gText_MenuPokemon, {.u8_void = StartMenuPokemonCallback}},
+    [MENU_ACTION_BAG]             = {gText_MenuBag,     {.u8_void = StartMenuBagCallback}},
+    [MENU_ACTION_POKENAV]         = {gText_MenuPokenav, {.u8_void = StartMenuPokeNavCallback}},
+    [MENU_ACTION_PLAYER]          = {gText_MenuPlayer,  {.u8_void = StartMenuPlayerNameCallback}},
+    [MENU_ACTION_SAVE]            = {gText_MenuSave,    {.u8_void = StartMenuSaveCallback}},
+    [MENU_ACTION_OPTION]          = {gText_MenuOption,  {.u8_void = StartMenuOptionCallback}},
+    // [MENU_ACTION_EXIT]            = {gText_MenuExit,    {.u8_void = StartMenuExitCallback}},
+    [MENU_ACTION_RETIRE_SAFARI]   = {gText_MenuRetire,  {.u8_void = StartMenuSafariZoneRetireCallback}},
+    [MENU_ACTION_PLAYER_LINK]     = {gText_MenuPlayer,  {.u8_void = StartMenuLinkModePlayerNameCallback}},
+    [MENU_ACTION_REST_FRONTIER]   = {gText_MenuRest,    {.u8_void = StartMenuSaveCallback}},
+    [MENU_ACTION_RETIRE_FRONTIER] = {gText_MenuRetire,  {.u8_void = StartMenuBattlePyramidRetireCallback}},
+>>>>>>> da57e7bcd2cda82f998a34f9ba363e778d0ea0a5
     [MENU_ACTION_PYRAMID_BAG]     = {gText_MenuBag,     {.u8_void = StartMenuBattlePyramidBagCallback}},
     [MENU_ACTION_DEBUG]           = {gText_MenuDebug,   {.u8_void = StartMenuDebugCallback}},
     [MENU_ACTION_QUEST_MENU]        = {sText_QuestMenu, {.u8_void = QuestMenuCallback}},
@@ -334,7 +349,12 @@ static void BuildNormalStartMenu(void)
     
     AddStartMenuAction(MENU_ACTION_SAVE);
     AddStartMenuAction(MENU_ACTION_OPTION);
-  //   AddStartMenuAction(MENU_ACTION_EXIT);
+<<<<<<< HEAD
+    AddStartMenuAction(MENU_ACTION_EXIT);
+    ShowStartMenuExtraWindow();
+=======
+    // AddStartMenuAction(MENU_ACTION_EXIT);
+>>>>>>> da57e7bcd2cda82f998a34f9ba363e778d0ea0a5
 }
 
 static void BuildDebugStartMenu(void)
@@ -374,7 +394,7 @@ static void BuildLinkModeStartMenu(void)
 
     AddStartMenuAction(MENU_ACTION_PLAYER_LINK);
     AddStartMenuAction(MENU_ACTION_OPTION);
-   // AddStartMenuAction(MENU_ACTION_EXIT);
+    // AddStartMenuAction(MENU_ACTION_EXIT);
 }
 
 static void BuildUnionRoomStartMenu(void)
@@ -409,7 +429,7 @@ static void BuildBattlePyramidStartMenu(void)
     AddStartMenuAction(MENU_ACTION_REST_FRONTIER);
     AddStartMenuAction(MENU_ACTION_RETIRE_FRONTIER);
     AddStartMenuAction(MENU_ACTION_OPTION);
-   // AddStartMenuAction(MENU_ACTION_EXIT);
+    // AddStartMenuAction(MENU_ACTION_EXIT);
 }
 
 static void BuildMultiPartnerRoomStartMenu(void)
@@ -460,8 +480,8 @@ static void RemoveExtraStartMenuWindows(void) //Modificado el 10/04/2023
     }
     else{ //Borra de la pantalla la venta auxiliar de la hora
         ClearStdWindowAndFrameToTransparent(sSafariBallsWindowId, FALSE);
-        CopyWindowToVram(sSafariBallsWindowId, 3);
         RemoveWindow(sSafariBallsWindowId);   
+        
     }
 }
 
@@ -503,8 +523,7 @@ static bool32 PrintStartMenuActions(s8 *pIndex, u32 count)
 
 #define TAG_ICONS_MENU 0x3333
 
-#define INITIAL_POS_RIGHT_X 40 
-#define INITIAL_POS_DOWN_Y 130
+#define INITIAL_POS_RIGHT_X 232 
 
 static const u16 sIconsMenuPal[] = INCBIN_U16("graphics/start_menu/menuIconPal.gbapal");
 static const u8 sIconMenuSprites[] = INCBIN_U8("graphics/start_menu/iconMenu.4bpp");
@@ -530,7 +549,7 @@ static const struct OamData gSpriteOamData32 =
 static const struct SpriteSheet spriteSheetIconsMenu =
 {
             .data = sIconMenuSprites, //GRÃFICO ----------
-            .size = 4608, //TAMAÃ‘O DEL GRÃFICO
+            .size = 3584, //TAMAÃ‘O DEL GRÃFICO
             .tag = TAG_ICONS_MENU, //LUGAR DONDE SE CARGA EL GRÃFICO ----------
 };
 static const struct SpritePalette spritePaletteIconsMenu =
@@ -539,7 +558,7 @@ static const struct SpritePalette spritePaletteIconsMenu =
             .tag = TAG_ICONS_MENU, //LUGAR DONDE SE CARGA LA PALETA ----------
 };
 
-static const union AnimCmd sAnimDex[] = //cambiar de
+static const union AnimCmd sAnimDex[] =
 {
     ANIMCMD_FRAME(0, 0),
     ANIMCMD_END,
@@ -558,49 +577,35 @@ static const union AnimCmd sAnimBag[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd sAnimNav[] =
+static const union AnimCmd sAnimCard[] =
 {
     ANIMCMD_FRAME(48, 0),
     ANIMCMD_END,
 };
 
-static const union AnimCmd sAnimQuest[] =
+static const union AnimCmd sAnimSave[] =
 {
     ANIMCMD_FRAME(64, 0),
     ANIMCMD_END,
 };
 
-static const union AnimCmd sAnimCard[] =
+static const union AnimCmd sAnimOption[] =
 {
     ANIMCMD_FRAME(80, 0),
     ANIMCMD_END,
 };
 
-static const union AnimCmd sAnimSave[] =
+static const union AnimCmd sAnimRetire[] =
 {
     ANIMCMD_FRAME(96, 0),
     ANIMCMD_END,
 };
 
-static const union AnimCmd sAnimOption[] =
-{
-    ANIMCMD_FRAME(112, 0),
-    ANIMCMD_END,
-};
-
-static const union AnimCmd sAnimRetire[] =
-{
-    ANIMCMD_FRAME(128, 0),
-    ANIMCMD_END,
-};
-
- static const union AnimCmd *const sAnimsIconMenu[] =
+static const union AnimCmd *const sAnimsIconMenu[] =
 {
     [MENU_ACTION_POKEDEX] = sAnimDex,
     [MENU_ACTION_POKEMON] = sAnimBall,
     [MENU_ACTION_BAG] = sAnimBag,
-    [MENU_ACTION_POKENAV] = sAnimNav,
-    [MENU_ACTION_QUEST_MENU] = sAnimQuest,
     [MENU_ACTION_PLAYER] = sAnimCard,
     [MENU_ACTION_SAVE] = sAnimSave,
     [MENU_ACTION_OPTION] = sAnimOption,
@@ -620,33 +625,25 @@ static const struct SpriteTemplate spriteTemplateIconsMenu =
 
 static void MoveSelectSpriteIcon()
 {
-    if(gSprites[sStartMenuSpritesId[sStartMenuCursorPos]].y != INITIAL_POS_DOWN_Y)
-        gSprites[sStartMenuSpritesId[sStartMenuCursorPos]].y += INITIAL_POS_DOWN_Y - gSprites[sStartMenuSpritesId[sStartMenuCursorPos]].y;
+    if(gSprites[sStartMenuSpritesId[sStartMenuCursorPos]].x != INITIAL_POS_RIGHT_X)
+        gSprites[sStartMenuSpritesId[sStartMenuCursorPos]].x += INITIAL_POS_RIGHT_X - gSprites[sStartMenuSpritesId[sStartMenuCursorPos]].x;
     else
-        gSprites[sStartMenuSpritesId[sStartMenuCursorPos]].y -= 20;
+        gSprites[sStartMenuSpritesId[sStartMenuCursorPos]].x -= 8;
 }
 void LoadSpriteIconMenu()
 {
     s8 i;
     u8 id;
-    u8 x = 50;
-    u8 y = INITIAL_POS_DOWN_Y;
-
-    if(sNumStartMenuActions ==4) x=70;
-    if(sNumStartMenuActions ==5) x=60;
-    if(sNumStartMenuActions ==6) x=50;
-    if(sNumStartMenuActions ==7) x=30;
-    if(sNumStartMenuActions ==8) x=19;
+    u8 y = 14;
 
     LoadSpriteSheet(&spriteSheetIconsMenu);
     LoadSpritePalette(&spritePaletteIconsMenu);
 
     for (i = 0; i < sNumStartMenuActions; i++)
     {
-        id = CreateSprite(&spriteTemplateIconsMenu, x, INITIAL_POS_DOWN_Y, 0);
-        x += 30;
+        id = CreateSprite(&spriteTemplateIconsMenu, INITIAL_POS_RIGHT_X, y, 0);
         StartSpriteAnim(&gSprites[id], sCurrentStartMenuActions[i]);
-        y -= 32;
+        y += 26;
         sStartMenuSpritesId[i] = id;
     }
 }
@@ -689,8 +686,6 @@ static bool32 InitStartMenuStep(void)
     case 3:
         if (GetSafariZoneFlag())
             ShowSafariBallsWindow();
-        else
-            ShowStartMenuExtraWindow();
         if (InBattlePyramid())
             ShowPyramidFloorWindow();
         sInitStartMenuData[0]++;
@@ -786,7 +781,7 @@ void ShowStartMenu(void)
 
 static bool8 HandleStartMenuInput(void)
 {
-    if (JOY_NEW(DPAD_LEFT))
+    if (JOY_NEW(DPAD_UP))
     {
         PlaySE(SE_SELECT);
         // sStartMenuCursorPos = Menu_MoveCursor(-1);
@@ -795,7 +790,7 @@ static bool8 HandleStartMenuInput(void)
         MoveSelectSpriteIcon();
     }
 
-    if (JOY_NEW(DPAD_RIGHT))
+    if (JOY_NEW(DPAD_DOWN))
     {
         PlaySE(SE_SELECT);
         // sStartMenuCursorPos = Menu_MoveCursor(1);
@@ -1674,5 +1669,5 @@ static void ShowStartMenuExtraWindow(void) // Función que carga una ventana aux
     DrawStdWindowFrame(sSafariBallsWindowId, FALSE);
     FormatDecimalTimeWOSeconds(gStringVar4, Rtc_GetCurrentHour(), Rtc_GetCurrentMinute());                                     
     AddTextPrinterParameterized(sSafariBallsWindowId, 1, gStringVar4, 0, 1, 0xFF, NULL);
-    CopyWindowToVram(sSafariBallsWindowId, 3);
+    CopyWindowToVram(sSafariBallsWindowId, 2);
 }

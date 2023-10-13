@@ -43,13 +43,10 @@
 #include "text_window.h"
 #include "trainer_card.h"
 #include "window.h"
-#include "quests.h"
-#include "constants/songs.h"
 #include "union_room.h"
 #include "constants/battle_frontier.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
-#include "rtc.h"
 
 // Menu actions
 enum
@@ -68,7 +65,6 @@ enum
     MENU_ACTION_RETIRE_FRONTIER,
     MENU_ACTION_PYRAMID_BAG,
     MENU_ACTION_DEBUG,
-    MENU_ACTION_QUEST_MENU,
 };
 
 // Save status
@@ -111,7 +107,6 @@ static bool8 StartMenuLinkModePlayerNameCallback(void);
 static bool8 StartMenuBattlePyramidRetireCallback(void);
 static bool8 StartMenuBattlePyramidBagCallback(void);
 static bool8 StartMenuDebugCallback(void);
-static bool8 QuestMenuCallback(void);
 
 // Menu callbacks
 static bool8 SaveStartCallback(void);
@@ -146,8 +141,15 @@ static void Task_SaveAfterLinkBattle(u8 taskId);
 static void Task_WaitForBattleTowerLinkSave(u8 taskId);
 static bool8 FieldCB_ReturnToFieldStartMenu(void);
 
-static const struct WindowTemplate sSafariBallsWindowTemplate = {0, 1, 1, 9, 4, 0xF, 8};
-static const struct WindowTemplate sStartMenuWindowTemplate = {0, 1, 1, 4, 2, 0xF, 8}; // Parámetros de la ventana extra 10/04/2023
+static const struct WindowTemplate sWindowTemplate_SafariBalls = {
+    .bg = 0,
+    .tilemapLeft = 1,
+    .tilemapTop = 1,
+    .width = 9,
+    .height = 4,
+    .paletteNum = 15,
+    .baseBlock = 0x8
+};
 
 static const u8 *const sPyramidFloorNames[FRONTIER_STAGES_PER_CHALLENGE + 1] =
 {
@@ -161,14 +163,44 @@ static const u8 *const sPyramidFloorNames[FRONTIER_STAGES_PER_CHALLENGE + 1] =
     gText_Peak
 };
 
-static const struct WindowTemplate sPyramidFloorWindowTemplate_2 = {0, 1, 1, 0xA, 4, 0xF, 8};
-static const struct WindowTemplate sPyramidFloorWindowTemplate_1 = {0, 1, 1, 0xC, 4, 0xF, 8};
+static const struct WindowTemplate sWindowTemplate_PyramidFloor = {
+    .bg = 0,
+    .tilemapLeft = 1,
+    .tilemapTop = 1,
+    .width = 10,
+    .height = 4,
+    .paletteNum = 15,
+    .baseBlock = 0x8
+};
+
+static const struct WindowTemplate sWindowTemplate_PyramidPeak = {
+    .bg = 0,
+    .tilemapLeft = 1,
+    .tilemapTop = 1,
+    .width = 12,
+    .height = 4,
+    .paletteNum = 15,
+    .baseBlock = 0x8
+};
 
 static const u8 gText_MenuDebug[] = _("DEBUG");
-static const u8 sText_QuestMenu[] = _("QUESTS");
 
 static const struct MenuAction sStartMenuItems[] =
 {
+<<<<<<< HEAD
+    [MENU_ACTION_POKEDEX]         = {gText_MenuPokedex, {.u8_void = StartMenuPokedexCallback}},
+    [MENU_ACTION_POKEMON]         = {gText_MenuPokemon, {.u8_void = StartMenuPokemonCallback}},
+    [MENU_ACTION_BAG]             = {gText_MenuBag,     {.u8_void = StartMenuBagCallback}},
+    [MENU_ACTION_POKENAV]         = {gText_MenuPokenav, {.u8_void = StartMenuPokeNavCallback}},
+    [MENU_ACTION_PLAYER]          = {gText_MenuPlayer,  {.u8_void = StartMenuPlayerNameCallback}},
+    [MENU_ACTION_SAVE]            = {gText_MenuSave,    {.u8_void = StartMenuSaveCallback}},
+    [MENU_ACTION_OPTION]          = {gText_MenuOption,  {.u8_void = StartMenuOptionCallback}},
+    //[MENU_ACTION_EXIT]            = {gText_MenuExit,    {.u8_void = StartMenuExitCallback}},
+    [MENU_ACTION_RETIRE_SAFARI]   = {gText_MenuRetire,  {.u8_void = StartMenuSafariZoneRetireCallback}},
+    [MENU_ACTION_PLAYER_LINK]     = {gText_MenuPlayer,  {.u8_void = StartMenuLinkModePlayerNameCallback}},
+    [MENU_ACTION_REST_FRONTIER]   = {gText_MenuRest,    {.u8_void = StartMenuSaveCallback}},
+    [MENU_ACTION_RETIRE_FRONTIER] = {gText_MenuRetire,  {.u8_void = StartMenuBattlePyramidRetireCallback}},
+=======
     [MENU_ACTION_POKEDEX]           = {gText_MenuPokedex, {.u8_void = StartMenuPokedexCallback}},
     [MENU_ACTION_POKEMON]           = {gText_MenuPokemon, {.u8_void = StartMenuPokemonCallback}},
     [MENU_ACTION_BAG]               = {gText_MenuBag, {.u8_void = StartMenuBagCallback}},
@@ -176,14 +208,14 @@ static const struct MenuAction sStartMenuItems[] =
     [MENU_ACTION_PLAYER]            = {gText_MenuPlayer, {.u8_void = StartMenuPlayerNameCallback}},
     [MENU_ACTION_SAVE]              = {gText_MenuSave, {.u8_void = StartMenuSaveCallback}},
     [MENU_ACTION_OPTION]            = {gText_MenuOption, {.u8_void = StartMenuOptionCallback}},
-    //[MENU_ACTION_EXIT]            = {gText_MenuExit,    {.u8_void = StartMenuExitCallback}},
+    // [MENU_ACTION_EXIT]            = {gText_MenuExit,    {.u8_void = StartMenuExitCallback}},
     [MENU_ACTION_RETIRE_SAFARI]     = {gText_MenuRetire, {.u8_void = StartMenuSafariZoneRetireCallback}},
     [MENU_ACTION_PLAYER_LINK]       = {gText_MenuPlayer, {.u8_void = StartMenuLinkModePlayerNameCallback}},
     [MENU_ACTION_REST_FRONTIER]     = {gText_MenuRest, {.u8_void = StartMenuSaveCallback}},
     [MENU_ACTION_RETIRE_FRONTIER]   = {gText_MenuRetire, {.u8_void = StartMenuBattlePyramidRetireCallback}},
+>>>>>>> 13fdd2c8d... papi menu
     [MENU_ACTION_PYRAMID_BAG]     = {gText_MenuBag,     {.u8_void = StartMenuBattlePyramidBagCallback}},
     [MENU_ACTION_DEBUG]           = {gText_MenuDebug,   {.u8_void = StartMenuDebugCallback}},
-    [MENU_ACTION_QUEST_MENU]        = {sText_QuestMenu, {.u8_void = QuestMenuCallback}},
 };
 
 static const struct BgTemplate sBgTemplates_LinkBattleSave[] =
@@ -257,7 +289,6 @@ static void ShowSaveInfoWindow(void);
 static void RemoveSaveInfoWindow(void);
 static void HideStartMenuWindow(void);
 static void HideStartMenuDebug(void);
-static void ShowStartMenuExtraWindow(void);
 
 void SetDexPokemonPokenavFlags(void) // unused
 {
@@ -328,13 +359,14 @@ static void BuildNormalStartMenu(void)
     }
 
     AddStartMenuAction(MENU_ACTION_PLAYER);
-    
-    if (FlagGet(FLAG_SYS_QUEST_MENU_GET))
-        AddStartMenuAction(MENU_ACTION_QUEST_MENU);
-    
     AddStartMenuAction(MENU_ACTION_SAVE);
     AddStartMenuAction(MENU_ACTION_OPTION);
+<<<<<<< HEAD
   //   AddStartMenuAction(MENU_ACTION_EXIT);
+=======
+    // AddStartMenuAction(MENU_ACTION_EXIT);
+    ShowStartMenuExtraWindow();
+>>>>>>> 13fdd2c8d... papi menu
 }
 
 static void BuildDebugStartMenu(void)
@@ -374,7 +406,11 @@ static void BuildLinkModeStartMenu(void)
 
     AddStartMenuAction(MENU_ACTION_PLAYER_LINK);
     AddStartMenuAction(MENU_ACTION_OPTION);
+<<<<<<< HEAD
    // AddStartMenuAction(MENU_ACTION_EXIT);
+=======
+    // AddStartMenuAction(MENU_ACTION_EXIT);
+>>>>>>> 13fdd2c8d... papi menu
 }
 
 static void BuildUnionRoomStartMenu(void)
@@ -409,7 +445,11 @@ static void BuildBattlePyramidStartMenu(void)
     AddStartMenuAction(MENU_ACTION_REST_FRONTIER);
     AddStartMenuAction(MENU_ACTION_RETIRE_FRONTIER);
     AddStartMenuAction(MENU_ACTION_OPTION);
+<<<<<<< HEAD
    // AddStartMenuAction(MENU_ACTION_EXIT);
+=======
+    // AddStartMenuAction(MENU_ACTION_EXIT);
+>>>>>>> 13fdd2c8d... papi menu
 }
 
 static void BuildMultiPartnerRoomStartMenu(void)
@@ -422,7 +462,7 @@ static void BuildMultiPartnerRoomStartMenu(void)
 
 static void ShowSafariBallsWindow(void)
 {
-    sSafariBallsWindowId = AddWindow(&sSafariBallsWindowTemplate);
+    sSafariBallsWindowId = AddWindow(&sWindowTemplate_SafariBalls);
     PutWindowTilemap(sSafariBallsWindowId);
     DrawStdWindowFrame(sSafariBallsWindowId, FALSE);
     ConvertIntToDecimalStringN(gStringVar1, gNumSafariBalls, STR_CONV_MODE_RIGHT_ALIGN, 2);
@@ -434,9 +474,9 @@ static void ShowSafariBallsWindow(void)
 static void ShowPyramidFloorWindow(void)
 {
     if (gSaveBlock2Ptr->frontier.curChallengeBattleNum == FRONTIER_STAGES_PER_CHALLENGE)
-        sBattlePyramidFloorWindowId = AddWindow(&sPyramidFloorWindowTemplate_1);
+        sBattlePyramidFloorWindowId = AddWindow(&sWindowTemplate_PyramidPeak);
     else
-        sBattlePyramidFloorWindowId = AddWindow(&sPyramidFloorWindowTemplate_2);
+        sBattlePyramidFloorWindowId = AddWindow(&sWindowTemplate_PyramidFloor);
 
     PutWindowTilemap(sBattlePyramidFloorWindowId);
     DrawStdWindowFrame(sBattlePyramidFloorWindowId, FALSE);
@@ -446,22 +486,18 @@ static void ShowPyramidFloorWindow(void)
     CopyWindowToVram(sBattlePyramidFloorWindowId, COPYWIN_GFX);
 }
 
-static void RemoveExtraStartMenuWindows(void) //Modificado el 10/04/2023
+static void RemoveExtraStartMenuWindows(void)
 {
     if (GetSafariZoneFlag())
     {
         ClearStdWindowAndFrameToTransparent(sSafariBallsWindowId, FALSE);
-        CopyWindowToVram(sSafariBallsWindowId, 2);
+        CopyWindowToVram(sSafariBallsWindowId, COPYWIN_GFX);
         RemoveWindow(sSafariBallsWindowId);
-    }else if (InBattlePyramid()) //Antes eran dos if separados
+    }
+    if (InBattlePyramid())
     {
         ClearStdWindowAndFrameToTransparent(sBattlePyramidFloorWindowId, FALSE);
         RemoveWindow(sBattlePyramidFloorWindowId);
-    }
-    else{ //Borra de la pantalla la venta auxiliar de la hora
-        ClearStdWindowAndFrameToTransparent(sSafariBallsWindowId, FALSE);
-        CopyWindowToVram(sSafariBallsWindowId, 3);
-        RemoveWindow(sSafariBallsWindowId);   
     }
 }
 
@@ -496,6 +532,10 @@ static bool32 PrintStartMenuActions(s8 *pIndex, u32 count)
     return FALSE;
 }
 
+<<<<<<< HEAD
+#define INITIAL_POS_RIGHT_X 40 
+#define INITIAL_POS_DOWN_Y 130
+=======
 
 //**********************************************
 //ICONS MENU
@@ -503,8 +543,8 @@ static bool32 PrintStartMenuActions(s8 *pIndex, u32 count)
 
 #define TAG_ICONS_MENU 0x3333
 
-#define INITIAL_POS_RIGHT_X 40 
-#define INITIAL_POS_DOWN_Y 130
+#define INITIAL_POS_RIGHT_X 232 
+>>>>>>> 13fdd2c8d... papi menu
 
 static const u16 sIconsMenuPal[] = INCBIN_U16("graphics/start_menu/menuIconPal.gbapal");
 static const u8 sIconMenuSprites[] = INCBIN_U8("graphics/start_menu/iconMenu.4bpp");
@@ -530,7 +570,11 @@ static const struct OamData gSpriteOamData32 =
 static const struct SpriteSheet spriteSheetIconsMenu =
 {
             .data = sIconMenuSprites, //GRÃFICO ----------
+<<<<<<< HEAD
             .size = 4608, //TAMAÃ‘O DEL GRÃFICO
+=======
+            .size = 3584, //TAMAÃ‘O DEL GRÃFICO
+>>>>>>> 13fdd2c8d... papi menu
             .tag = TAG_ICONS_MENU, //LUGAR DONDE SE CARGA EL GRÃFICO ----------
 };
 static const struct SpritePalette spritePaletteIconsMenu =
@@ -539,7 +583,11 @@ static const struct SpritePalette spritePaletteIconsMenu =
             .tag = TAG_ICONS_MENU, //LUGAR DONDE SE CARGA LA PALETA ----------
 };
 
+<<<<<<< HEAD
 static const union AnimCmd sAnimDex[] = //cambiar de
+=======
+static const union AnimCmd sAnimDex[] =
+>>>>>>> 13fdd2c8d... papi menu
 {
     ANIMCMD_FRAME(0, 0),
     ANIMCMD_END,
@@ -558,6 +606,7 @@ static const union AnimCmd sAnimBag[] =
     ANIMCMD_END,
 };
 
+<<<<<<< HEAD
 static const union AnimCmd sAnimNav[] =
 {
     ANIMCMD_FRAME(48, 0),
@@ -573,34 +622,58 @@ static const union AnimCmd sAnimQuest[] =
 static const union AnimCmd sAnimCard[] =
 {
     ANIMCMD_FRAME(80, 0),
+=======
+static const union AnimCmd sAnimCard[] =
+{
+    ANIMCMD_FRAME(48, 0),
+>>>>>>> 13fdd2c8d... papi menu
     ANIMCMD_END,
 };
 
 static const union AnimCmd sAnimSave[] =
 {
+<<<<<<< HEAD
     ANIMCMD_FRAME(96, 0),
+=======
+    ANIMCMD_FRAME(64, 0),
+>>>>>>> 13fdd2c8d... papi menu
     ANIMCMD_END,
 };
 
 static const union AnimCmd sAnimOption[] =
 {
+<<<<<<< HEAD
     ANIMCMD_FRAME(112, 0),
+=======
+    ANIMCMD_FRAME(80, 0),
+>>>>>>> 13fdd2c8d... papi menu
     ANIMCMD_END,
 };
 
 static const union AnimCmd sAnimRetire[] =
 {
+<<<<<<< HEAD
     ANIMCMD_FRAME(128, 0),
     ANIMCMD_END,
 };
 
  static const union AnimCmd *const sAnimsIconMenu[] =
+=======
+    ANIMCMD_FRAME(96, 0),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnimsIconMenu[] =
+>>>>>>> 13fdd2c8d... papi menu
 {
     [MENU_ACTION_POKEDEX] = sAnimDex,
     [MENU_ACTION_POKEMON] = sAnimBall,
     [MENU_ACTION_BAG] = sAnimBag,
+<<<<<<< HEAD
     [MENU_ACTION_POKENAV] = sAnimNav,
     [MENU_ACTION_QUEST_MENU] = sAnimQuest,
+=======
+>>>>>>> 13fdd2c8d... papi menu
     [MENU_ACTION_PLAYER] = sAnimCard,
     [MENU_ACTION_SAVE] = sAnimSave,
     [MENU_ACTION_OPTION] = sAnimOption,
@@ -620,15 +693,23 @@ static const struct SpriteTemplate spriteTemplateIconsMenu =
 
 static void MoveSelectSpriteIcon()
 {
+<<<<<<< HEAD
     if(gSprites[sStartMenuSpritesId[sStartMenuCursorPos]].y != INITIAL_POS_DOWN_Y)
         gSprites[sStartMenuSpritesId[sStartMenuCursorPos]].y += INITIAL_POS_DOWN_Y - gSprites[sStartMenuSpritesId[sStartMenuCursorPos]].y;
     else
         gSprites[sStartMenuSpritesId[sStartMenuCursorPos]].y -= 20;
+=======
+    if(gSprites[sStartMenuSpritesId[sStartMenuCursorPos]].x != INITIAL_POS_RIGHT_X)
+        gSprites[sStartMenuSpritesId[sStartMenuCursorPos]].x += INITIAL_POS_RIGHT_X - gSprites[sStartMenuSpritesId[sStartMenuCursorPos]].x;
+    else
+        gSprites[sStartMenuSpritesId[sStartMenuCursorPos]].x -= 8;
+>>>>>>> 13fdd2c8d... papi menu
 }
 void LoadSpriteIconMenu()
 {
     s8 i;
     u8 id;
+<<<<<<< HEAD
     u8 x = 50;
     u8 y = INITIAL_POS_DOWN_Y;
 
@@ -637,16 +718,25 @@ void LoadSpriteIconMenu()
     if(sNumStartMenuActions ==6) x=50;
     if(sNumStartMenuActions ==7) x=30;
     if(sNumStartMenuActions ==8) x=19;
+=======
+    u8 y = 14;
+>>>>>>> 13fdd2c8d... papi menu
 
     LoadSpriteSheet(&spriteSheetIconsMenu);
     LoadSpritePalette(&spritePaletteIconsMenu);
 
     for (i = 0; i < sNumStartMenuActions; i++)
     {
+<<<<<<< HEAD
         id = CreateSprite(&spriteTemplateIconsMenu, x, INITIAL_POS_DOWN_Y, 0);
         x += 30;
         StartSpriteAnim(&gSprites[id], sCurrentStartMenuActions[i]);
         y -= 32;
+=======
+        id = CreateSprite(&spriteTemplateIconsMenu, INITIAL_POS_RIGHT_X, y, 0);
+        StartSpriteAnim(&gSprites[id], sCurrentStartMenuActions[i]);
+        y += 26;
+>>>>>>> 13fdd2c8d... papi menu
         sStartMenuSpritesId[i] = id;
     }
 }
@@ -689,8 +779,6 @@ static bool32 InitStartMenuStep(void)
     case 3:
         if (GetSafariZoneFlag())
             ShowSafariBallsWindow();
-        else
-            ShowStartMenuExtraWindow();
         if (InBattlePyramid())
             ShowPyramidFloorWindow();
         sInitStartMenuData[0]++;
@@ -1660,19 +1748,4 @@ void AppendToList(u8 *list, u8 *pos, u8 newEntry)
 {
     list[*pos] = newEntry;
     (*pos)++;
-}
-
-static bool8 QuestMenuCallback(void)
-{
-    CreateTask(Task_QuestMenu_OpenFromStartMenu, 0);
-    return TRUE;
-}
-static void ShowStartMenuExtraWindow(void) // Función que carga una ventana auxiliar en el menú de pausa. 10/04/2023
-{   
-    sSafariBallsWindowId = AddWindow(&sStartMenuWindowTemplate);
-    PutWindowTilemap(sSafariBallsWindowId);
-    DrawStdWindowFrame(sSafariBallsWindowId, FALSE);
-    FormatDecimalTimeWOSeconds(gStringVar4, Rtc_GetCurrentHour(), Rtc_GetCurrentMinute());                                     
-    AddTextPrinterParameterized(sSafariBallsWindowId, 1, gStringVar4, 0, 1, 0xFF, NULL);
-    CopyWindowToVram(sSafariBallsWindowId, 3);
 }
