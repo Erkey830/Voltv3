@@ -8078,7 +8078,7 @@ const u32 gMonFrontPic_GimmighoulRoaming[] = INCBIN_U32("graphics/pokemon/gimmig
 const u32 gMonPalette_GimmighoulRoaming[] = INCBIN_U32("graphics/pokemon/gimmighoul/roaming/normal.gbapal.lz");
 const u32 gMonBackPic_GimmighoulRoaming[] = INCBIN_U32("graphics/pokemon/gimmighoul/roaming/back.4bpp.lz");
 const u32 gMonShinyPalette_GimmighoulRoaming[] = INCBIN_U32("graphics/pokemon/gimmighoul/roaming/shiny.gbapal.lz");
-// const u8 gMonIcon_GimmighoulRoaming[] = INCBIN_U8("graphics/pokemon/gimmighoul/icon.4bpp");
+const u8 gMonIcon_GimmighoulRoaming[] = INCBIN_U8("graphics/pokemon/gimmighoul/icon.4bpp");
 
 const u32 gMonFrontPic_Gholdengo[] = INCBIN_U32("graphics/pokemon/gholdengo/front.4bpp.lz");
 const u32 gMonPalette_Gholdengo[] = INCBIN_U32("graphics/pokemon/gholdengo/normal.gbapal.lz");
